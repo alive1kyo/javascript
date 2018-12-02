@@ -1,0 +1,262 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" type="text/css" href="location_test.css">
+<style>
+.wrapper {
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
+  font-family: 'ＭＳ Ｐゴシック', 'MS PGothic';
+}
+h1 {
+  font-size: 28px;
+}
+h2 {
+  margin-top: 30px;
+  padding-bottom: 3px;
+  padding-left: 10px;
+  border-left: 5px solid #FFCC00;
+  font-size: 24px;
+}
+h3 {
+  margin-top: 35px;
+  padding: 15px 0;
+  border-bottom: 1px solid #CCC;
+  font-size: 18px;
+  font-weight: normal;
+}
+ul, ol {
+  margin: 0;
+  padding: 0;
+}
+ul li, ol li {
+  line-height: 1.6;
+}
+.tabs ul, .tabs ol  {
+  list-style: none;
+}
+.link-param, .link-hash {
+  padding-left: 25px;
+}
+.link-hash {
+  margin: 0 0 50px;
+}
+
+/*
+ * tabs
+ */
+.tabs {
+  margin: 0 0 10px;
+}
+.tabs .tab-list {
+  display: table;
+  width: 100%;
+  margin: 0 -1px;
+  border-left: 1px solid #cccccc;
+  overflow: hidden;
+}
+.tabs .tab-list li {
+  display: table-cell;
+  height: 2em;
+  line-height: 2em;
+  border-top: 1px solid #cccccc;
+  border-right: 1px solid #cccccc;
+}
+.tabs .tab-list li a.active {
+  background-color: #eee;
+}
+.tabs .tab-list li:hover {
+  background-color: #ddd;
+}
+.tabs .tab-list li a {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+}
+.tabs .tab-body {
+  border: 1px solid #ccc;
+  padding: 20px;
+}
+.tabs .tab-body li a.active {
+  display: block;
+}
+
+</style>
+<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+<script>
+	window.addEventListener("load",function(){
+		var b1 = document.getElementById("btn1");
+		b1.addEventListener("click",function(){
+			alert("javascript");
+		});
+	});
+	$(function(){
+		$("#btn2").on("click",function(){
+			alert("jquery");
+		});
+
+	});
+	$("document").ready(function(){
+	var data = new Array(); // var data = {}; ←波カッコだけでもよい
+		data["url"] = location.href; // url
+		data["host"] = location.hostname; // host
+		data["path"] = location.pathname; // path
+		data["query"] = location.search; // query
+		data["protocol"] = location.protocol; // protocol
+		data["search"] = location.search;
+		data["hash"] = location.hash;
+		var dsp = "";
+	//	for (i=0; i<Object.keys(data).length; i++){
+		for (var key in data){
+		//	tmp = data.findIndex(data);
+			dsp += key + ":　" + data[key] + "<br>";
+		}
+		$("#dsp").html(dsp);
+	// 連想配列の要素数の数え方
+		$("#kosu").html("dataの要素数は、" + Object.keys(data).length + "です。");
+		// 普通の配列なら data.length　で取れる
+		checkPram();
+
+		// URLのアンカー（#以降の部分）を取得
+		var urlHash = location.hash;		 
+		// URLにアンカーが存在する場合
+		if(urlHash){
+		  // アンカーが#osakaかどうかを判断する
+		  if (urlHash == '#kyoto') {
+			$('.hash').append('<p>京都です</p>');
+		  } else {
+			$('.hash').append('<p>京都ではありません</p>');
+		  }
+		}
+
+		// URLにアンカーが存在する場合
+		  $(".oyorei button").on("click",function(){
+		// URLのアンカー（#以降の部分）を取得
+		var urlHash = location.hash;		 
+		// URLにアンカーが存在する場合
+
+		  if(urlHash){
+	  alert(urlHash);		  
+				// タブの<a>タグのhref属性の値にアンカーの値と同じ値が含まれている要素を選択
+				var targetTabHash = $('.tab-list li a[href$="' + urlHash + '"]');	 
+				if(targetTabHash.length > 0){
+				  // HTML側でデフォルトで設定している'active'というクラスを削除する
+				  $('.tab-list li a').removeClass('active');
+				  // <a>タグのhref属性の値とアンカーが同じだった場合、そのタブの<a>タグに'active'というクラスを付与する
+				  targetTabHash.addClass('active');
+				}
+			  }
+		  });
+
+		});
+	
+	function checkPram(){
+		// URLのパラメータを取得
+		var urlParam = location.search.substring(1);		 
+		// URLにパラメータが存在する場合
+		if(urlParam) {
+		  // 「&」が含まれている場合は「&」で分割
+		  var param = urlParam.split('&');	 
+		  // パラメータを格納する用の配列を用意
+		  var paramArray = [];		 
+		  // 用意した配列にパラメータを格納
+		  for (i = 0; i < param.length; i++) {
+			var paramItem = param[i].split('=');
+			paramArray[paramItem[0]] = paramItem[1];
+		  }		 
+		  // パラメータidがosakaかどうかを判断する
+		  if (paramArray.id == 'kcg') {
+			$('.pram').append('<p>KCGです</p>');
+		  } else {
+			$('.pram').append('<p>KCGではありません</p>');
+		  }
+		}
+		
+
+		
+		// URLにパラメータが存在する場合
+		  if(urlParam) {
+			// タブの<a>タグのhref属性の値にパラメータidの値と同じ値が含まれている要素を選択
+			var targetTabParam = $('.tab-list li a[href$="#' + paramArray.id + '"]');		 
+			if(targetTabParam.length > 0){
+			  // HTML側でデフォルトで設定している'active'というクラスを削除する
+			  $('.tab-list li a').removeClass('active');
+			  // <a>タグのhref属性の値とパラメータidが同じだった場合、そのタブの<a>タグに'active'というクラスを付与する
+			  targetTabParam.addClass('active');
+			}
+		  }
+		 
+
+		 
+		  // タブ切り替えを実行
+		  $('.tab-body li:not('+$('.tab-list li a.active').attr('href')+')').hide();
+		  $('.tab-list li a').click(function(){
+			$('.tab-list li a').removeClass('active');
+			$(this).addClass('active');
+			$('.tab-body li').hide();
+			$($(this).attr('href')).fadeIn();
+			return false;
+		  });
+	
+	}
+</script>
+</head>
+<body>
+<h1>CSSの働きチェック</h1>
+<h2>javascriptの働きチェック</h2>
+<button id="btn1">javascript</button>
+<button id="btn2">jquery</button>
+
+<h2>location属性取得</h2>
+<div id="dsp"></div>
+<div id="kosu"></div>
+
+<h2>パラメーター実験</h2>
+<form>
+<input type="submit" name="id" value="kcg">
+<input type="submit" name="id" value="abc">
+</form>
+<div class="pram"></div>
+<div class="hash"></div>
+
+<h2>応用例</h2>
+<div class="oyorei">
+<a href="#kyoto"><button>京都で読み込む</button></a>
+<a href="#osaka"><button>大阪で読み込む</button></a>
+<a href="#nara"><button>奈良で読み込む</button></a>
+<a href="#kobe"><button>神戸で読み込む</button></a>
+</div>
+<div class="tabs">
+      <ul class="tab-list">
+        <li><a class="active" href="#kyoto">京都</a></li>
+        <li><a href="#osaka">大阪</a></li>
+        <li><a href="#kobe">神戸</a></li>
+        <li><a href="#nara">奈良</a></li>
+      </ul>
+      <ul class="tab-body">
+        <li id="kyoto">
+          <p>京都（きょうと、みやこ、きょうのみやこ、英: Kyōto）は、日本の都市である。</p>
+          <p>都、京ともいい、歴史的には794年に日本の首都に定められた都城・平安京で、当時は日本の政治・文化の中心地であった。</p>
+          <p>東アジアでは古来、歴史的に「天子の住む都」「首都」を意味する普通名詞として京（きょう）、京師（けいし）が多く使用されていた。西晋時代に世宗（司馬師）の諱である「師」の文字を避けて京都（けいと）と言うようになり、以後は京、京師、京都などの呼び名が用いられた。</p>
+        </li>
+        <li id="osaka" style="display: none;">
+          <p>大阪（おおさか、英: Ōsaka）は、日本の近畿地方（関西地方）の地名である。西日本最大の都市である大阪市（狭義の大阪）と、大阪市を府庁所在地とする大阪府を指す地域名称であり、広い意味では大阪市を中心とする京阪神（畿内、大阪都市圏、関西圏）を漠然と総称することにも使われる。関西の経済・文化の中心地で、古くは大坂と表記した。</p>
+          <p>古都・副都としての歴史を持ち、長らく首都東京に次ぐ都市として、経済、文化、バックアップ面で重要な役割を担っている。大阪府は日本国第3の都市圏にある愛知県を域内総生産で上回り、アジアのゲートと呼ばれる福岡県に対しては域内にそれぞれ存する関西国際空港と福岡空港の国際線旅客数、国際貨物取扱量で関西国際空港が大きく上回る。</p>
+          <p>大阪は都市単位の経済規模で世界3位。都市圏人口で世界12位のメガシティと評価されている。</p>
+        </li>
+        <li id="kobe" style="display: none;">
+          <p>神戸市（こうべし）は、兵庫県南部に位置する兵庫県の県庁所在地である。垂水区・須磨区・長田区・兵庫区・中央区・灘区・東灘区・北区・西区から構成される政令指定都市である。</p>
+          <p>海と山の迫る東西に細長い市街地を持ち、十分な水深の有る扇状の入り江部に発展した理想的な港湾・神戸港を有する日本を代表する港町である。</p>
+          <p>市域中央に横たわる六甲山地の山上の高原一帯は日本における別荘・リゾート等の発祥地として有名であり、六甲北麓の有馬温泉は日本三古湯の一つとして古来より名高い。</p>
+        </li>
+        <li id="nara" style="display: none;">
+          <p>奈良（なら）は、日本国の発祥とされる歴史的地名である。異表記として那羅・平城・寧楽などがある（読みは全て「なら」）。平安京（京都）に都が遷った後は南都（なんと）とも呼ばれた。古くは大和と呼ばれ、また平城京にも相当した。</p>
+          <p>平城京が置かれていた奈良時代には、シルクロードの終着点として国際色豊かな天平文化が花開き、大伽藍が建ち並ぶ都として数々の貴重な文化財が創り出された。国宝建造物数は日本最多である。文学の面では古事記、日本書紀万葉集風土記など国内最古の史書や歌集が編纂された。平安京への遷都以後も南都と称されて、日本の宗教・文化の歴史において大きな影響を与えた。</p>
+          <p>現在は年間を通して新旧の行事で賑い、国際観光文化都市として国内外から多数の観光客が訪れている。2010年（平成22年）には平城遷都1300年記念事業が開催された。</p>
+        </li>
+      </ul>
+    </div>
+</body>
+</html>
